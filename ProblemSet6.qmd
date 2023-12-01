@@ -82,9 +82,9 @@ boot <- function(dat) {
     sd13 <- sd(Reduce(c, df_mean_1[ , 3]))
 
     # get the mean and confidence intervals
-    result_1 <- as.data.frame(rbind(c("EWR", mean_air_time$mean[1], mean_air_time$mean[1] + 1.96*sd11, mean_air_time$mean[1] - 1.96*sd11),
-          c("JFK", mean_air_time$mean[2], mean_air_time$mean[2] + 1.96*sd12, mean_air_time$mean[2] - 1.96*sd12),
-          c("LGA", mean_air_time$mean[3], mean_air_time$mean[3] + 1.96*sd13, mean_air_time$mean[3] - 1.96*sd13)))
+    result_1 <- as.data.frame(rbind(c("EWR", mean_air_time$mean[1], mean_air_time$mean[1] - 1.96*sd11, mean_air_time$mean[1] + 1.96*sd11),
+          c("JFK", mean_air_time$mean[2], mean_air_time$mean[2] - 1.96*sd12, mean_air_time$mean[2] + 1.96*sd12),
+          c("LGA", mean_air_time$mean[3], mean_air_time$mean[3] - 1.96*sd13, mean_air_time$mean[3] + 1.96*sd13)))
 
     # give the final result
     colnames(result_1) <- c("origin", "mean", "CI_lower", "CI_upper")
@@ -108,13 +108,13 @@ boot <- function(dat) {
     sd23 <- sd(Reduce(c, df_mean_2[ , 3]))
 
     # get the mean and confidence intervals
-    result_2 <- as.data.frame(rbind(c("EWR", mean_air_time$mean[1], mean_air_time$mean[1] + 1.96*sd21, mean_air_time$mean[1] - 1.96*sd21),
-          c("JFK", mean_air_time$mean[2], mean_air_time$mean[2] + 1.96*sd22, mean_air_time$mean[2] - 1.96*sd22),
-          c("LGA", mean_air_time$mean[3], mean_air_time$mean[3] + 1.96*sd23, mean_air_time$mean[3] - 1.96*sd23)))
+    result_2 <- as.data.frame(rbind(c("EWR", mean_air_time$mean[1], mean_air_time$mean[1] - 1.96*sd21, mean_air_time$mean[1] + 1.96*sd21),
+          c("JFK", mean_air_time$mean[2], mean_air_time$mean[2] - 1.96*sd22, mean_air_time$mean[2] + 1.96*sd22),
+          c("LGA", mean_air_time$mean[3], mean_air_time$mean[3] - 1.96*sd23, mean_air_time$mean[3] + 1.96*sd23)))
 
     # give the final result
     colnames(result_2) <- c("origin", "mean", "CI_lower", "CI_upper")
     result_2
     ```
 
-We can see that it runs faster when using parallel processing.
+We can see that it runs faster when using parallel processing. Both methods give the same result after setting seed.

@@ -183,7 +183,7 @@ Attaching package: 'dplyr'</code></pre>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>(res1 <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">seq_len</span>(reps), <span class="cf">function</span>(x) <span class="fu">boot</span>(flights)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
-134.046   5.170 139.601 </code></pre>
+133.836   4.249 175.000 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transfer the result into a data frame</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>df_mean_1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">do.call</span>(rbind, res1))</span>
@@ -194,18 +194,18 @@ Attaching package: 'dplyr'</code></pre>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>sd13 <span class="ot">&lt;-</span> <span class="fu">sd</span>(<span class="fu">Reduce</span>(c, df_mean_1[ , <span class="dv">3</span>]))</span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># get the mean and confidence intervals</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>result_1 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">rbind</span>(<span class="fu">c</span>(<span class="st">"EWR"</span>, mean_air_time<span class="sc">$</span>mean[<span class="dv">1</span>], mean_air_time<span class="sc">$</span>mean[<span class="dv">1</span>] <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>sd11, mean_air_time<span class="sc">$</span>mean[<span class="dv">1</span>] <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>sd11),</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="st">"JFK"</span>, mean_air_time<span class="sc">$</span>mean[<span class="dv">2</span>], mean_air_time<span class="sc">$</span>mean[<span class="dv">2</span>] <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>sd12, mean_air_time<span class="sc">$</span>mean[<span class="dv">2</span>] <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>sd12),</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="st">"LGA"</span>, mean_air_time<span class="sc">$</span>mean[<span class="dv">3</span>], mean_air_time<span class="sc">$</span>mean[<span class="dv">3</span>] <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>sd13, mean_air_time<span class="sc">$</span>mean[<span class="dv">3</span>] <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>sd13)))</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>result_1 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">rbind</span>(<span class="fu">c</span>(<span class="st">"EWR"</span>, mean_air_time<span class="sc">$</span>mean[<span class="dv">1</span>], mean_air_time<span class="sc">$</span>mean[<span class="dv">1</span>] <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>sd11, mean_air_time<span class="sc">$</span>mean[<span class="dv">1</span>] <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>sd11),</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="st">"JFK"</span>, mean_air_time<span class="sc">$</span>mean[<span class="dv">2</span>], mean_air_time<span class="sc">$</span>mean[<span class="dv">2</span>] <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>sd12, mean_air_time<span class="sc">$</span>mean[<span class="dv">2</span>] <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>sd12),</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="st">"LGA"</span>, mean_air_time<span class="sc">$</span>mean[<span class="dv">3</span>], mean_air_time<span class="sc">$</span>mean[<span class="dv">3</span>] <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>sd13, mean_air_time<span class="sc">$</span>mean[<span class="dv">3</span>] <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>sd13)))</span>
 <span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co"># give the final result</span></span>
 <span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(result_1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"origin"</span>, <span class="st">"mean"</span>, <span class="st">"CI_lower"</span>, <span class="st">"CI_upper"</span>)</span>
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>result_1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  origin             mean         CI_lower         CI_upper
-1    EWR 153.300024759448 153.904233268417  152.69581625048
-2    JFK 178.349049771269 178.936582996974 177.761516545565
-3    LGA 117.825805813727  118.10194022209 117.549671405365</code></pre>
+1    EWR 153.300024759448  152.69581625048 153.904233268417
+2    JFK 178.349049771269 177.761516545565 178.936582996974
+3    LGA 117.825805813727 117.549671405365  118.10194022209</code></pre>
 </div>
 </div></li>
 <li><p>With parallel processing</p>
@@ -216,7 +216,7 @@ Attaching package: 'dplyr'</code></pre>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>(res2 <span class="ot">&lt;-</span> <span class="fu">mclapply</span>(<span class="fu">seq_len</span>(reps), <span class="cf">function</span>(x) <span class="fu">boot</span>(flights)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
- 71.562   0.200  72.352 </code></pre>
+ 71.306   0.199  72.166 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transfer the result into a data frame</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>df_mean_2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">do.call</span>(rbind, res2))</span>
@@ -227,22 +227,22 @@ Attaching package: 'dplyr'</code></pre>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>sd23 <span class="ot">&lt;-</span> <span class="fu">sd</span>(<span class="fu">Reduce</span>(c, df_mean_2[ , <span class="dv">3</span>]))</span>
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co"># get the mean and confidence intervals</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>result_2 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">rbind</span>(<span class="fu">c</span>(<span class="st">"EWR"</span>, mean_air_time<span class="sc">$</span>mean[<span class="dv">1</span>], mean_air_time<span class="sc">$</span>mean[<span class="dv">1</span>] <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>sd21, mean_air_time<span class="sc">$</span>mean[<span class="dv">1</span>] <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>sd21),</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="st">"JFK"</span>, mean_air_time<span class="sc">$</span>mean[<span class="dv">2</span>], mean_air_time<span class="sc">$</span>mean[<span class="dv">2</span>] <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>sd22, mean_air_time<span class="sc">$</span>mean[<span class="dv">2</span>] <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>sd22),</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="st">"LGA"</span>, mean_air_time<span class="sc">$</span>mean[<span class="dv">3</span>], mean_air_time<span class="sc">$</span>mean[<span class="dv">3</span>] <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>sd23, mean_air_time<span class="sc">$</span>mean[<span class="dv">3</span>] <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>sd23)))</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>result_2 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">rbind</span>(<span class="fu">c</span>(<span class="st">"EWR"</span>, mean_air_time<span class="sc">$</span>mean[<span class="dv">1</span>], mean_air_time<span class="sc">$</span>mean[<span class="dv">1</span>] <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>sd21, mean_air_time<span class="sc">$</span>mean[<span class="dv">1</span>] <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>sd21),</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="st">"JFK"</span>, mean_air_time<span class="sc">$</span>mean[<span class="dv">2</span>], mean_air_time<span class="sc">$</span>mean[<span class="dv">2</span>] <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>sd22, mean_air_time<span class="sc">$</span>mean[<span class="dv">2</span>] <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>sd22),</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="st">"LGA"</span>, mean_air_time<span class="sc">$</span>mean[<span class="dv">3</span>], mean_air_time<span class="sc">$</span>mean[<span class="dv">3</span>] <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>sd23, mean_air_time<span class="sc">$</span>mean[<span class="dv">3</span>] <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>sd23)))</span>
 <span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co"># give the final result</span></span>
 <span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(result_2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"origin"</span>, <span class="st">"mean"</span>, <span class="st">"CI_lower"</span>, <span class="st">"CI_upper"</span>)</span>
 <span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>result_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  origin             mean         CI_lower         CI_upper
-1    EWR 153.300024759448 153.877084058161 152.722965460736
-2    JFK 178.349049771269 178.926256543925 177.771842998613
-3    LGA 117.825805813727 118.088732662791 117.562878964664</code></pre>
+1    EWR 153.300024759448 152.719514085677  153.88053543322
+2    JFK 178.349049771269 177.753893319393 178.944206223145
+3    LGA 117.825805813727 117.550643877357 118.100967750098</code></pre>
 </div>
 </div></li>
 </ol>
-<p>We can see that it runs faster when using parallel processing.</p>
+<p>We can see that it runs faster when using parallel processing. Both methods give the same result after setting seed.</p>
 </section>
 
 </main>
