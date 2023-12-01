@@ -101,6 +101,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
+<p>link: https://github.com/YangningTan/ProblemSet6</p>
 <section id="problem-1" class="level2">
 <h2 class="anchored" data-anchor-id="problem-1">Problem 1</h2>
 <p>Use the&nbsp;<code>flights</code>&nbsp;data from the&nbsp;<strong>nycflights13</strong>&nbsp;package. Use stratafied bootstrapping by&nbsp;<code>dests</code>&nbsp;to estimate the average&nbsp;<code>air_time</code>&nbsp;for flights within each&nbsp;<code>origin</code>&nbsp;and produce a table including the estimates and confidence intervals for each&nbsp;<code>origin</code>.</p>
@@ -182,7 +183,7 @@ Attaching package: 'dplyr'</code></pre>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>(res1 <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">seq_len</span>(reps), <span class="cf">function</span>(x) <span class="fu">boot</span>(flights)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
-133.817   5.626 139.789 </code></pre>
+134.046   5.170 139.601 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transfer the result into a data frame</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>df_mean_1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">do.call</span>(rbind, res1))</span>
@@ -215,7 +216,7 @@ Attaching package: 'dplyr'</code></pre>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>(res2 <span class="ot">&lt;-</span> <span class="fu">mclapply</span>(<span class="fu">seq_len</span>(reps), <span class="cf">function</span>(x) <span class="fu">boot</span>(flights)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
- 71.284   0.193  72.381 </code></pre>
+ 71.562   0.200  72.352 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transfer the result into a data frame</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>df_mean_2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">do.call</span>(rbind, res2))</span>
@@ -235,9 +236,9 @@ Attaching package: 'dplyr'</code></pre>
 <span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>result_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  origin             mean         CI_lower         CI_upper
-1    EWR 153.300024759448 153.896869152904 152.703180365993
-2    JFK 178.349049771269 178.943773586763 177.754325955776
-3    LGA 117.825805813727 118.107811246599 117.543800380855</code></pre>
+1    EWR 153.300024759448 153.877084058161 152.722965460736
+2    JFK 178.349049771269 178.926256543925 177.771842998613
+3    LGA 117.825805813727 118.088732662791 117.562878964664</code></pre>
 </div>
 </div></li>
 </ol>
