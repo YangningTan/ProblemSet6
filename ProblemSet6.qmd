@@ -1,0 +1,118 @@
+---
+title: "ProblemSet6"
+author: "Yangning Tan"
+format: html
+editor: visual
+---
+
+## Problem 1
+
+Use the `flights` data from the **nycflights13** package. Use stratafied bootstrapping by `dests` to estimate the average `air_time` for flights within each `origin` and produce a table including the estimates and confidence intervals for each `origin`.
+
+Carry this out two ways:
+
+1.  Without any parallel processing
+
+2.  With some form of parallel processing (either **parallel** or **futures** package). (For very minor extra credit, implement with both packages.)
+
+We first import the data and filter the NA values.
+
+```{r}
+library(nycflights13)
+library(dplyr)
+flights <- nycflights13::flights %>% filter(!is.na(air_time))
+```
+
+Subsequently, we get the mean `air_time` of each `origin`.
+
+```{r}
+mean_air_time <- flights %>% 
+    group_by(origin) %>% 
+    summarize(mean = mean(air_time)) %>% 
+    ungroup()
+mean_air_time
+```
+
+Then, we define the bootstrap function.
+
+```{r}
+boot <- function(dat) {
+  # stratified bootstrap
+  strata <- unique(dat$dest)
+  
+  stratified_boot_samples <- list()
+  
+  for (i in 1:length(dat)) {
+    stratum_data <- dat[dat$dest == strata[i], , drop = FALSE]
+    new_stratum_data <- stratum_data[sample(1:nrow(stratum_data), replace = TRUE), ]
+    stratified_boot_samples[[i]] <- new_stratum_data
+  }
+  
+  new_dat <- do.call(rbind, stratified_boot_samples)
+  
+  col_names <- colnames(dat) 
+  colnames(new_dat) <- col_names
+  
+  # find the mean air_time of each origin
+  new_dat %>% 
+    group_by(origin) %>% 
+    summarize(mean = mean(air_time)) %>% 
+    ungroup() -> result
+  
+  return(result$mean)
+}
+```
+
+1.  Without parallel processing
+
+    ```{r}
+    reps <- 1000
+    set.seed(1)
+    # check the time it needs to generate the bootstrap samples
+    system.time(res1 <- lapply(seq_len(reps), function(x) boot(flights)))
+
+    # transfer the result into a data frame
+    df_mean_1 <- data.frame(do.call(rbind, res1))
+
+    # compute the standard error
+    sd11 <- sd(Reduce(c, df_mean_1[ , 1]))
+    sd12 <- sd(Reduce(c, df_mean_1[ , 2]))
+    sd13 <- sd(Reduce(c, df_mean_1[ , 3]))
+
+    # get the mean and confidence intervals
+    result_1 <- as.data.frame(rbind(c("EWR", mean_air_time$mean[1], mean_air_time$mean[1] + 1.96*sd11, mean_air_time$mean[1] - 1.96*sd11),
+          c("JFK", mean_air_time$mean[2], mean_air_time$mean[2] + 1.96*sd12, mean_air_time$mean[2] - 1.96*sd12),
+          c("LGA", mean_air_time$mean[3], mean_air_time$mean[3] + 1.96*sd13, mean_air_time$mean[3] - 1.96*sd13)))
+
+    # give the final result
+    colnames(result_1) <- c("origin", "mean", "CI_lower", "CI_upper")
+    result_1
+    ```
+
+2.  With parallel processing
+
+    ```{r}
+    library(parallel)
+    set.seed(1)
+    # check the time it needs to generate the bootstrap samples
+    system.time(res2 <- mclapply(seq_len(reps), function(x) boot(flights)))
+
+    # transfer the result into a data frame
+    df_mean_2 <- data.frame(do.call(rbind, res2))
+
+    # compute the standard error
+    sd21 <- sd(Reduce(c, df_mean_2[ , 1]))
+    sd22 <- sd(Reduce(c, df_mean_2[ , 2]))
+    sd23 <- sd(Reduce(c, df_mean_2[ , 3]))
+
+    # get the mean and confidence intervals
+    result_2 <- as.data.frame(rbind(c("EWR", mean_air_time$mean[1], mean_air_time$mean[1] + 1.96*sd21, mean_air_time$mean[1] - 1.96*sd21),
+          c("JFK", mean_air_time$mean[2], mean_air_time$mean[2] + 1.96*sd22, mean_air_time$mean[2] - 1.96*sd22),
+          c("LGA", mean_air_time$mean[3], mean_air_time$mean[3] + 1.96*sd23, mean_air_time$mean[3] - 1.96*sd23)))
+
+    # give the final result
+    colnames(result_2) <- c("origin", "mean", "CI_lower", "CI_upper")
+    result_2
+    ```
+
+We can see that it runs faster when using parallel processing.
